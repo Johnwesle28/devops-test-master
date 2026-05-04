@@ -28,3 +28,478 @@ entirely up to you.
 When you are finished with the exercise, please submit the configuration for
 your solution and any documentation we might need in order to apply that
 configuration.
+
+
+
+
+### John ###
+
+Option1#
+Setup for High Level using Monolithic based in EC2
+
+1.Design the Architecture
+2.Prepare the techstack
+3.Setup the Infrastructure using IAAC Terraform / CloudFormation
+4.Setup the CI/CD Pipeline using Jenkins & Shellscript
+5.Follow the Security Best Practices for Layer7 (WAF) , Layer3 (Firewall)
+6.Enable Scaling using Metrics (CPU , RAM)
+7.Setup the Observability stack using Loki , Prometheus, Grafana, CloudWatch
+8.Cost Optimization
+9.Documentation for entire setup & process
+
+1.Design the Architecture:
+
+Frontend flow:
+User request → WAF → CDN → Public ALB → Frontend Application → Application
+
+
+Frontend - Backend flow:
+User request → WAF → CDN → Public ALB → Frontend Application → Backend Application
+
+Frontend - Backed - Database flow:
+FE → BE → DB
+User request → WAF → CDN → Public ALB → Frontend Application → Backend Application → DB , Kafka , Redis
+
+Observability stack for FE -BE - DB:
+FE , BE , DB:  Observability (Logs , Metrics , Traces) → Alerts (Pagerduty)
+
+2.Prepare the techstack
+    Cloud Provider: AWS
+    IAAC tool: Terraform
+    Application server: Apache Tomcat
+    Load balancer: AWS ALB
+    Server : EC2
+    Certificates: AWS ACM
+    DNS : Route53
+    CICD Tools: Jenkins , GitHub, Shellscript
+    Observability Tools: Loki , Prometheus , Grafana, Cloudwatch 
+    Alerting Tools: PagerDuty , Opsgenie
+    Layer7 Security: AWS WAF or any external WAF
+     Layer3 Security: AWS Firewall 
+     Subnet Level Security: NACL
+     Server Level Security: Security Groups
+     Code Quality: SonarQube
+     EKS nodes scaling: AWS ASG
+     Autoscaling: CPU & RAM
+     Database: RDS PostgreSQL
+     Caching Database: AWS EC Redis
+     Environments: DEV , QA, UAT, PREPROD, PROD
+     
+     
+3.Setup the Infrastructure using IAAC Terraform / CloudFormation
+    Provider
+    IAM roles
+    vpc (subnets , RouteTables, IGW, NACL, NAT, EIP, )
+    acm
+    NACL
+    SecurityGroups
+    CDN
+    WAF
+    ALB
+    RDS PostgreSQL
+    EC Redis
+    Cloudwatch
+    SNS
+    Route53
+    AWS MSK (Kafka)
+     
+4.Setup the CI/CD Pipeline using Jenkins / Shellscripting / Ansible
+Write Code → SCM →  Jenkins Build → Sonar Test → Generate Artifact→ Deploy in environments (Shellscript / Ansible) → Run application in environments ( EC2 )
+
+IDE
+GitHub / GitLab
+Jenkins / Ansible
+SonarQube
+
+
+
+
+
+5.Follow the Security Best Practices for Layer7 (WAF) , Layer3 (Firewall), Code scan (Sonarqube)
+ WAF
+ NACL 
+ Security groups
+ Create Only ALB in public
+ Remaining all resources in private subnets (EC2, Database, Kafka , Redis, CICD Tools, SRE Tools)
+ Store Secrets / application properties in AWS Secrets Manager / AWS Parameter 
+
+6.Enable Scaling using CPU & RAM
+    Autoscaling Group: Using ASG EC2 policies
+
+7.Setup the Observability stack using Loki , prometheus, Grafana, Cloudwatch
+Logs: Loki
+Metrics: Prometheus
+Traces: Jeager
+Visualisation: Grafana
+
+FLow:
+App → Prometheus → Grafana
+App Logs → Loki → Grafana
+AWS Infra Monitoring→ CloudWatch
+
+
+8.Documentation for entire setup & process
+   Prepare the step by step documentation using Confluence
+    Design Architectures using Draw.io
+
+##################################################
+
+Option 2#
+Setup for High Level using micro service based & Kubernetes
+
+1.Design the Architecture
+2.Prepare the techstack
+3.Setup the Infrastructure using IAAC Terraform / CloudFormation
+4.Setup the CI/CD Pipeline using Jenkins / GitHub Actions / GitLab CICD / helm / ArgoCD
+5.Follow the Security Best Practices for Layer7 (WAF) , Layer3 (Firewall) 
+6.Enable Scaling using HPA / VPA / KEDA
+7.Setup the Observability stack using Loki , prometheus, Grafana, Cloudwatch
+8.Cost Optimisation
+9.Documentation for entire setup & process
+
+1.Design the Architecture:
+
+Frontend flow:
+User request → WAF → CDN → Public ALB (Ingress) → ALB Ingress Controller → Frontend K8s service → Pod → Container → Application
+
+Frontend - Backend flow:
+User request → WAF → CDN → Public ALB (Ingress) → ALB Ingress Controller → Frontend K8s service → Pod → Container → Application → Backend API
+
+Frontend - Backed - Database flow:
+FE → BE → DB
+User request → WAF → CDN → Public ALB (Ingress) → ALB Ingress Controller → Frontend K8s service → Pod → Container → Application → Backend API → DB , Kafka , Redis
+
+Observability stack for FE -BE - DB:
+FE , BE , DB:  Observability (Logs , Metrics , Traces) → Alerts (Pagerduty)
+
+
+2.Prepare the techstack
+     Cloud Provider: AWS
+     IAAC tool: Terraform
+     Container Technology: Docker
+     Container Orchestration: Kubernetes (EKS)
+     Application server: Apache Tomcat
+     Ingress: AWS ALB
+     Ingress Controller: AWS ALB Ingress Controller
+     Certificates: AWS ACM
+     DNS : Route53
+     CICD Tools: Jenkins , GitHub Actions , ArgoCD, Helm , Ansible
+     Observability Tools: Loki , Prometheus , Grafana, Cloudwatch 
+     Alerting Tools: PagerDuty , Opsgenie
+     Layer7 Security: AWS WAF or any external WAF
+     Layer3 Security: AWS Firewall
+     Subnet Level Security: NACL
+     Server Level Security: Security Groups
+     Code Quality: SonarQube
+     Codescan: AWS ECR image scan
+     Docker Registry: ECR
+     Container Technology: Docker
+     Container Orchestration Technology: AWS EKS
+     EKS nodes scaling: AWS ASG , Karpenter
+     Pod scaling: HPA, VPA, KEDA
+     Database: RDS PostgreSQL
+     Caching Database: AWS EC Redis
+     Environments: DEV , QA, UAT, PREPROD, PROD
+     
+     
+3.Setup the Infrastructure using IAAC Terraform / CloudFormation
+    Provider
+    IAM roles
+    vpc (subnets , RouteTables, IGW, NACL, NAT, EIP, )
+    acm
+    NACL
+    SecurityGroups
+    CDN
+    WAF
+    ALB
+    EKS
+    ECR
+    RDS PostgreSQL
+    EC Redis
+    Cloudwatch
+    SNS
+    Route53
+    AWS MSK (Kafka)
+       
+    
+4.Setup the CI/CD Pipeline using Jenkins / GitHub Actions / GitLab CICD / helm / ArgoCD
+
+Write Code → SCM →  Jenkins Build → Sonar Test → Build Docker Image → Push Docker Image (ECR) → Deploy in environments (ArgoCD/Helm) → Run application in environments ( EKS )
+
+IDE
+GitHub / GitLab
+Jenkins / GitHub Actions / ArgoCD / Helm
+SonarQube
+ECR
+EKS
+
+
+5.Follow the Security Best Practices for Layer7 (WAF) , Layer3 (Firewall) , Code scan (SonarQube)
+ WAF
+ NACL 
+ Security groups
+ Create Only ALB in public
+ Remaining all resources in private subnets (EKS, EC2, Database, Kafka , Redis, CICD Tools, SRE Tools)
+Scan docker image using ECR scan
+Store Secrets / application properties in AWS Secrets Manager / K8s Secrets / AWS Parameter 
+
+6.Enable Scaling using HPA / VPA / KEDA
+     EKS nodes scaling: AWS ASG , Karpenter
+     Pod scaling: HPA, VPA, KEDA
+
+7.Setup the Observability stack using Loki , prometheus, Grafana, Cloudwatch
+Logs: Loki
+Metrics: Prometheus
+Traces: Jeager
+Visualisation: Grafana
+
+FLow:
+App → Prometheus → Grafana
+App Logs → Loki → Grafana
+AWS Infra Monitoring→ CloudWatch
+
+
+Option1#
+Setup for High Level using Monolithic based in EC2
+
+1.Design the Architecture
+2.Prepare the techstack
+3.Setup the Infrastructure using IAAC Terraform / CloudFormation
+4.Setup the CI/CD Pipeline using Jenkins & Shellscript
+5.Follow the Security Best Practices for Layer7 (WAF) , Layer3 (Firewall)
+6.Enable Scaling using Metrics (CPU , RAM)
+7.Setup the Observability stack using Loki , Prometheus, Grafana, CloudWatch
+8.Cost Optimization
+9.Documentation for entire setup & process
+
+1.Design the Architecture:
+
+Frontend flow:
+User request → WAF → CDN → Public ALB → Frontend Application → Application
+
+
+Frontend - Backend flow:
+User request → WAF → CDN → Public ALB → Frontend Application → Backend Application
+
+Frontend - Backed - Database flow:
+FE → BE → DB
+User request → WAF → CDN → Public ALB → Frontend Application → Backend Application → DB , Kafka , Redis
+
+Observability stack for FE -BE - DB:
+FE , BE , DB:  Observability (Logs , Metrics , Traces) → Alerts (Pagerduty)
+
+2.Prepare the techstack
+    Cloud Provider: AWS
+    IAAC tool: Terraform
+    Application server: Apache Tomcat
+    Load balancer: AWS ALB
+    Server : EC2
+    Certificates: AWS ACM
+    DNS : Route53
+    CICD Tools: Jenkins , GitHub, Shellscript
+    Observability Tools: Loki , Prometheus , Grafana, Cloudwatch 
+    Alerting Tools: PagerDuty , Opsgenie
+    Layer7 Security: AWS WAF or any external WAF
+     Layer3 Security: AWS Firewall 
+     Subnet Level Security: NACL
+     Server Level Security: Security Groups
+     Code Quality: SonarQube
+     EKS nodes scaling: AWS ASG
+     Autoscaling: CPU & RAM
+     Database: RDS PostgreSQL
+     Caching Database: AWS EC Redis
+     Environments: DEV , QA, UAT, PREPROD, PROD
+     
+     
+3.Setup the Infrastructure using IAAC Terraform / CloudFormation
+    Provider
+    IAM roles
+    vpc (subnets , RouteTables, IGW, NACL, NAT, EIP, )
+    acm
+    NACL
+    SecurityGroups
+    CDN
+    WAF
+    ALB
+    RDS PostgreSQL
+    EC Redis
+    Cloudwatch
+    SNS
+    Route53
+    AWS MSK (Kafka)
+     
+4.Setup the CI/CD Pipeline using Jenkins / Shellscripting / Ansible
+Write Code → SCM →  Jenkins Build → Sonar Test → Generate Artifact→ Deploy in environments (Shellscript / Ansible) → Run application in environments ( EC2 )
+
+IDE
+GitHub / GitLab
+Jenkins / Ansible
+SonarQube
+
+
+
+
+
+5.Follow the Security Best Practices for Layer7 (WAF) , Layer3 (Firewall), Code scan (Sonarqube)
+ WAF
+ NACL 
+ Security groups
+ Create Only ALB in public
+ Remaining all resources in private subnets (EC2, Database, Kafka , Redis, CICD Tools, SRE Tools)
+ Store Secrets / application properties in AWS Secrets Manager / AWS Parameter 
+
+6.Enable Scaling using CPU & RAM
+    Autoscaling Group: Using ASG EC2 policies
+
+7.Setup the Observability stack using Loki , prometheus, Grafana, Cloudwatch
+Logs: Loki
+Metrics: Prometheus
+Traces: Jeager
+Visualisation: Grafana
+
+FLow:
+App → Prometheus → Grafana
+App Logs → Loki → Grafana
+AWS Infra Monitoring→ CloudWatch
+
+
+8.Documentation for entire setup & process
+   Prepare the step by step documentation using Confluence
+    Design Architectures using Draw.io
+
+##################################################
+
+Option 2#
+Setup for High Level using micro service based & Kubernetes
+
+1.Design the Architecture
+2.Prepare the techstack
+3.Setup the Infrastructure using IAAC Terraform / CloudFormation
+4.Setup the CI/CD Pipeline using Jenkins / GitHub Actions / GitLab CICD / helm / ArgoCD
+5.Follow the Security Best Practices for Layer7 (WAF) , Layer3 (Firewall) 
+6.Enable Scaling using HPA / VPA / KEDA
+7.Setup the Observability stack using Loki , prometheus, Grafana, Cloudwatch
+8.Cost Optimisation
+9.Documentation for entire setup & process
+
+1.Design the Architecture:
+
+Frontend flow:
+User request → WAF → CDN → Public ALB (Ingress) → ALB Ingress Controller → Frontend K8s service → Pod → Container → Application
+
+Frontend - Backend flow:
+User request → WAF → CDN → Public ALB (Ingress) → ALB Ingress Controller → Frontend K8s service → Pod → Container → Application → Backend API
+
+Frontend - Backed - Database flow:
+FE → BE → DB
+User request → WAF → CDN → Public ALB (Ingress) → ALB Ingress Controller → Frontend K8s service → Pod → Container → Application → Backend API → DB , Kafka , Redis
+
+Observability stack for FE -BE - DB:
+FE , BE , DB:  Observability (Logs , Metrics , Traces) → Alerts (Pagerduty)
+
+
+2.Prepare the techstack
+     Cloud Provider: AWS
+     IAAC tool: Terraform
+     Container Technology: Docker
+     Container Orchestration: Kubernetes (EKS)
+     Application server: Apache Tomcat
+     Ingress: AWS ALB
+     Ingress Controller: AWS ALB Ingress Controller
+     Certificates: AWS ACM
+     DNS : Route53
+     CICD Tools: Jenkins , GitHub Actions , ArgoCD, Helm , Ansible
+     Observability Tools: Loki , Prometheus , Grafana, Cloudwatch 
+     Alerting Tools: PagerDuty , Opsgenie
+     Layer7 Security: AWS WAF or any external WAF
+     Layer3 Security: AWS Firewall
+     Subnet Level Security: NACL
+     Server Level Security: Security Groups
+     Code Quality: SonarQube
+     Codescan: AWS ECR image scan
+     Docker Registry: ECR
+     Container Technology: Docker
+     Container Orchestration Technology: AWS EKS
+     EKS nodes scaling: AWS ASG , Karpenter
+     Pod scaling: HPA, VPA, KEDA
+     Database: RDS PostgreSQL
+     Caching Database: AWS EC Redis
+     Environments: DEV , QA, UAT, PREPROD, PROD
+     
+     
+3.Setup the Infrastructure using IAAC Terraform / CloudFormation
+    Provider
+    IAM roles
+    vpc (subnets , RouteTables, IGW, NACL, NAT, EIP, )
+    acm
+    NACL
+    SecurityGroups
+    CDN
+    WAF
+    ALB
+    EKS
+    ECR
+    RDS PostgreSQL
+    EC Redis
+    Cloudwatch
+    SNS
+    Route53
+    AWS MSK (Kafka)
+       
+    
+4.Setup the CI/CD Pipeline using Jenkins / GitHub Actions / GitLab CICD / helm / ArgoCD
+
+Write Code → SCM →  Jenkins Build → Sonar Test → Build Docker Image → Push Docker Image (ECR) → Deploy in environments (ArgoCD/Helm) → Run application in environments ( EKS )
+
+IDE
+GitHub / GitLab
+Jenkins / GitHub Actions / ArgoCD / Helm
+SonarQube
+ECR
+EKS
+
+
+5.Follow the Security Best Practices for Layer7 (WAF) , Layer3 (Firewall) , Code scan (SonarQube)
+ WAF
+ NACL 
+ Security groups
+ Create Only ALB in public
+ Remaining all resources in private subnets (EKS, EC2, Database, Kafka , Redis, CICD Tools, SRE Tools)
+Scan docker image using ECR scan
+Store Secrets / application properties in AWS Secrets Manager / K8s Secrets / AWS Parameter 
+
+6.Enable Scaling using HPA / VPA / KEDA
+     EKS nodes scaling: AWS ASG , Karpenter
+     Pod scaling: HPA, VPA, KEDA
+
+7.Setup the Observability stack using Loki , prometheus, Grafana, Cloudwatch
+Logs: Loki
+Metrics: Prometheus
+Traces: Jeager
+Visualisation: Grafana
+
+FLow:
+App → Prometheus → Grafana
+App Logs → Loki → Grafana
+AWS Infra Monitoring→ CloudWatch
+
+
+8.Documentation for entire setup & process
+   Prepare the step by step documentation using Confluence
+   Design Architectures using Draw.io
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
