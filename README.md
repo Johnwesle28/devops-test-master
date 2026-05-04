@@ -29,10 +29,48 @@ When you are finished with the exercise, please submit the configuration for
 your solution and any documentation we might need in order to apply that
 configuration.
 
+### Application ran John And Find below Details ###
+
+
+## Notes on behavior
+
+- The app expects `src/config.json` to include:
+  - `{ "apiUrl": "http://<api-host>:8080" }`
+- On create (`POST /`):
+  - Shows success message if key/value is stored
+  - Shows duplicate-key message if API returns `409`
+- On fetch (`GET /{key}`):
+  - Shows fetched value when found
+  - Shows "Key not found" on `404`
+- The app now shows loading and error messages for better UX.
+
+# Endpoints
+
+- `GET /health`
+  - Returns health status:
+  - `200` with `{ "status": "ok" }`
+
+- `POST /`
+  - Request JSON:
+	- `{ "key": "...", "value": "..." }`
+  - Behavior:
+	- Uses Redis `SETNX` (create only if key does not already exist)
+  - Responses:
+	- `201` with `{ "key": "...", "value": "...", "created": true }`
+	- `409` with `{ "key": "...", "value": "...", "created": false }` when key already exists
+	- `400` with `{ "error": "..." }` for invalid input
+	- `500` with `{ "error": "..." }` for internal/Redis errors
+
+- `GET /{key}`
+  - Responses:
+	- `200` with `{ "key": "...", "value": "..." }`
+	- `404` with empty body if key is not found
+	- `400` with `{ "error": "..." }` for invalid key
+	- `500` with `{ "error": "..." }` for internal/Redis errors
 
 
 
-### John ###
+### best practiaces provided by john for application setup and infra setup ###
 
 Option1#
 Setup for High Level using Monolithic based in EC2
@@ -130,7 +168,7 @@ SonarQube
 Logs: Loki
 Metrics: Prometheus
 Traces: Jeager
-Visualisation: Grafana
+Visualisation: GrafanA
 
 FLow:
 App → Prometheus → Grafana
